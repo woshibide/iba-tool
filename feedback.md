@@ -9,7 +9,7 @@ First feedback:
 
 Colors:
 [x] could you make only the colors in the attachment available? 
-[] Or that we have all the colors as an extra pull down, but the IBA brand colors as clickable option? 
+[x] Or that we have all the colors as an extra pull down, but the IBA brand colors as clickable option? 
 [x] And then opening the tool Standard red object on white, 
 [x] and then optional for front color, background color 
 [x] and the stroke we can leave out for now… 
