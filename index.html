@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iba iba iba</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.5/p5.min.js"></script> -->
+</head>
+<body>
+    <div class="menu-container">
+        <div class="menu-header" onclick="toggleMenu()">
+            <img id="logo" src="./logo.svg" alt="">
+        </div>
+        <div class="menu-content" id="menuContent">
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <div class="controls-header" onclick="toggleControls()">
+                    <h3>Controls</h3>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="controls-content" id="controlsContent">
+                    <div class="slider-group">
+                        <label class="slider-label">Number of Rows</label>
+                        <div class="slider-container">
+                            <input type="range" min="3" max="10" value="5" class="slider" id="numRowsSlider" oninput="updateSliderValue('numRows', this.value)">
+                            <span class="slider-value" id="numRowsValue">5</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label class="slider-label">Interpolation Steps</label>
+                        <div class="slider-container">
+                            <input type="range" min="0.1" max="200" value="8" class="slider" id="interpolationStepsSlider" oninput="updateSliderValue('interpolationSteps', this.value)">
+                            <span class="slider-value" id="interpolationStepsValue">8</span>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="slider-group">
+                        <label class="slider-label">Number of Columns</label>
+                        <div class="slider-container">
+                            <input type="range" min="3" max="10" value="5" class="slider" id="numColsSlider" oninput="updateSliderValue('numCols', this.value)">
+                            <span class="slider-value" id="numColsValue">5</span>
+                        </div>
+                    </div> -->
+                    
+                    <div class="slider-group">
+                        <label class="slider-label">Row Width</label>
+                        <div class="slider-container">
+                            <input type="range" min="20" max="100" value="40" class="slider" id="rowWidthSlider" oninput="updateSliderValue('rowWidth', this.value)">
+                            <span class="slider-value" id="rowWidthValue">40</span>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label class="slider-label">Column Height</label>
+                        <div class="slider-container">
+                            <input type="range" min="20" max="100" value="40" class="slider" id="colWidthSlider" oninput="updateSliderValue('colWidth', this.value)">
+                            <span class="slider-value" id="colWidthValue">40</span>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label class="slider-label">Random Offset</label>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="20" value="3" class="slider" id="randomOffsetSlider" oninput="updateSliderValue('randomOffset', this.value)">
+                            <span class="slider-value" id="randomOffsetValue">3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label class="slider-label">Animation Speed</label>
+                        <div class="slider-container">
+                            <input type="range" min="10" max="200" value="50" class="slider" id="animationSpeedSlider" oninput="updateSliderValue('animationSpeed', this.value)">
+                            <span class="slider-value" id="animationSpeedValue">50</span>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label class="slider-label">Max Shapes</label>
+                        <div class="slider-container">
+                            <input type="range" min="5" max="50" value="25" class="slider" id="maxShapesSlider" oninput="updateSliderValue('maxShapes', this.value)">
+                            <span class="slider-value" id="maxShapesValue">25</span>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="slider-group">
+                        <label class="slider-label">Stroke Weight</label>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="10" value="1" class="slider" id="strokeWeightSlider" oninput="updateSliderValue('strokeWeight', this.value)">
+                            <span class="slider-value" id="strokeWeightValue">1</span>
+                        </div>
+                    </div> -->
+                    <div class="slider-group">
+                        
+                        <!-- <div class="color-group">
+                            <label class="color-label">Stroke</label>
+                            <input type="color" id="strokeColorPicker" value="#000000" oninput="updateColorValue('strokeColor', this.value)">
+                        </div> -->
+                        
+                        <div class="color-group">
+                            <label class="color-label">Fill</label>
+                            <input type="color" id="fillColorPicker" value="#ff0f0f" oninput="updateColorValue('fillColor', this.value)">
+                        </div>
+
+                        <div class="color-group" style="margin-top: 0.5rem;">
+                            <label class="color-label">Background</label>
+                            <input type="color" id="bgColorPicker" value="#ffffff" oninput="updateColorValue('bgColor', this.value)">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="control-button" id="stopButton" onclick="toggleAnimation()">Stop Animation</button>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="randomModeCheckbox" onchange="toggleFlag('randomMode')">
+                            Random Mode
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showPointsCheckbox" onchange="toggleFlag('showPoints')">
+                            Show Points
+                        </label>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="control-button" id="exportButton" onclick="exportFrame()">Export Frame</button>
+                        <button class="control-button" id="exportGraphicsButton" onclick="exportGraphics()">Export Graphics</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Obstacle Section -->
+            <!-- <div class="obstacle-section">
+                <div class="obstacle-header" onclick="toggleObstacle()">
+                    <h3>Obstacle</h3>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="obstacle-content" id="obstacleContent">
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showObstacleCheckbox" unchecked onchange="toggleFlag('showObstacle')">
+                            Show Obstacle
+                        </label>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label class="slider-label">Mode</label>
+                        <select id="obstacleModeSelect" class="preset-select" onchange="updateObstacleMode(this.value)">
+                            <option value="none">None</option>
+                            <option value="avoid">Avoid</option>
+                            <option value="contain-clip">Contain (Clip to Boundary)</option>
+                            <option value="contain-push">Contain (Push to Center)</option>
+                            <option value="attract">Attract</option>
+                        </select>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label class="slider-label">Push Strength</label>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="100" value="5" class="slider" id="obstaclePushStrengthSlider" oninput="updateSliderValue('obstaclePushStrength', this.value)">
+                            <span class="slider-value" id="obstaclePushStrengthValue">50</span>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            
+            <!-- Presets Section -->
+            <div class="presets-section">
+                <div class="presets-header" onclick="togglePresets()">
+                    <h3>Presets</h3>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="presets-content" id="presetsContent">
+                    <div class="preset-group">
+                        <input type="text" id="presetNameInput" placeholder="Preset name" class="preset-input">
+                        <button class="control-button" onclick="savePreset()">Save Preset</button>
+                    </div>
+                    
+                    <div class="preset-group">
+                        <select id="presetSelect" class="preset-select">
+                            <option value="">Select a preset...</option>
+                        </select>
+                        <button class="control-button" onclick="loadPreset()">Load</button>
+                        <button class="control-button" onclick="deletePreset()">Delete</button>
+                    </div>
+                    
+                    <div class="preset-group">
+                        <button class="control-button" onclick="exportPresets()">Export Presets</button>
+                        <input type="file" id="importFile" accept=".json" style="display: none;">
+                        <button class="control-button" onclick="document.getElementById('importFile').click()">Import Presets</button>
+                    </div>
+                    
+                    <div id="presetStatus" class="preset-status"></div>
+                </div>
+            </div>
+
+            <div class="credits">
+                <h4>Somehow for IBA</h4>
+            </div>
+        </div>
+    </div>
+    
+    <div id="p5-canvas"></div>
+
+    <script src="presets.js" defer></script>
+    <script src="obstacles.js" defer></script>
+    <script src="color-picker.js" defer></script>
+    <script src="script.js" defer></script>
+</body>
+</html>
