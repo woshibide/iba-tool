@@ -3,16 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iba iba iba</title>
+    <title>IBA Tool by Somehow</title>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon_32px.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon_16px.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="./favicon/favicon_48px.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./favicon/favicon_192px.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="167x167" href="./favicon/favicon_167px.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./favicon/favicon_180px.png">
+    <link rel="shortcut icon" type="image/png" href="./favicon/favicon_180px.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="./styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://unpkg.com/p5.js-svg@1.6.0"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.5/p5.min.js"></script> -->
 </head>
 <body>
     <div class="menu-container">
         <div class="menu-header" onclick="toggleMenu()">
             <img id="logo" src="./logo.svg" alt="">
+            <div id="handle"></div>
         </div>
         <div class="menu-content" id="menuContent">
             <!-- Controls Section -->
@@ -22,19 +33,20 @@
                     <span class="dropdown-arrow">▼</span>
                 </div>
                 <div class="controls-content" id="controlsContent">
+
                     <div class="slider-group">
-                        <label class="slider-label">Number of Rows</label>
+                        <label class="slider-label">Number of Figures</label>
                         <div class="slider-container">
-                            <input type="range" min="3" max="10" value="5" class="slider" id="numRowsSlider" oninput="updateSliderValue('numRows', this.value)">
-                            <span class="slider-value" id="numRowsValue">5</span>
+                            <input type="range" min="0.1" max="200" value="8" class="slider" id="interpolationStepsSlider" oninput="updateSliderValue('interpolationSteps', this.value)">
+                            <span class="slider-value" id="interpolationStepsValue">8</span>
                         </div>
                     </div>
 
                     <div class="slider-group">
-                        <label class="slider-label">Interpolation Steps</label>
+                        <label class="slider-label">Number of Sets</label>
                         <div class="slider-container">
-                            <input type="range" min="0.1" max="200" value="8" class="slider" id="interpolationStepsSlider" oninput="updateSliderValue('interpolationSteps', this.value)">
-                            <span class="slider-value" id="interpolationStepsValue">8</span>
+                            <input type="range" min="3" max="10" value="5" class="slider" id="numRowsSlider" oninput="updateSliderValue('numRows', this.value)">
+                            <span class="slider-value" id="numRowsValue">5</span>
                         </div>
                     </div>
                     
@@ -57,8 +69,8 @@
                     <div class="slider-group">
                         <label class="slider-label">Column Height</label>
                         <div class="slider-container">
-                            <input type="range" min="20" max="100" value="40" class="slider" id="colWidthSlider" oninput="updateSliderValue('colWidth', this.value)">
-                            <span class="slider-value" id="colWidthValue">40</span>
+                            <input type="range" min="20" max="100" value="40" class="slider" id="colHeightSlider" oninput="updateSliderValue('colHeight', this.value)">
+                            <span class="slider-value" id="colHeightValue">40</span>
                         </div>
                     </div>
                     
@@ -123,11 +135,15 @@
                             <input type="checkbox" id="showPointsCheckbox" onchange="toggleFlag('showPoints')">
                             Show Points
                         </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeBackgroundCheckbox" checked onchange="toggleFlag('includeBackground')">
+                            Include Background in Export
+                        </label>
                     </div>
                     
                     <div class="button-group">
-                        <button class="control-button" id="exportButton" onclick="exportFrame()">Export Frame</button>
-                        <button class="control-button" id="exportGraphicsButton" onclick="exportGraphics()">Export Graphics</button>
+                        <button class="control-button" id="exportButton" onclick="exportFrame()">Export PNG</button>
+                        <button class="control-button" id="exportGraphicsButton" onclick="exportGraphics()">Export SVG</button>
                     </div>
                 </div>
             </div>
@@ -205,9 +221,9 @@
     
     <div id="p5-canvas"></div>
 
-    <script src="presets.js" defer></script>
-    <script src="obstacles.js" defer></script>
-    <script src="color-picker.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="./js/presets.js" defer></script>
+    <script src="./js/obstacles.js" defer></script>
+    <script src="./js/color-picker.js" defer></script>
+    <script src="./js/script.js" defer></script>
 </body>
 </html>

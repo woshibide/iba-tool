@@ -1,4 +1,17 @@
+@font-face {
+    font-family: "Diatype";
+    src: url("./fonts/ABCDiatypeVariable.ttf");
+    /*               ^^^^^^^^^^^^^^^^^^^^^^^^ 
+        if you different name for font file,
+        change this line here for correct path 
+    */
+
+}
+
 :root {
+
+    --le-font: "Diatype", Helvetica, sans-serif;
+
     font-size: 12px;
     --bg-color: #f5f5f5;
     --text-color: #000000;
@@ -16,7 +29,7 @@ body {
     min-height: 100svh;
     align-items: center;
     margin: 0;
-    font-family: system-ui, -apple-system, Arial, Helvetica, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: var(--le-font);
 }
 
 .menu-container {
@@ -39,6 +52,7 @@ body {
     cursor: pointer;
     user-select: none;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     /* border-bottom: 1px solid rgb(150, 150, 150); */
@@ -49,6 +63,17 @@ body {
 }
 .menu-header:hover {
     background-color: var(--bg-tertiary);
+}
+.menu-header:hover #handle {
+    background: whitesmoke;
+}
+
+#handle {
+    transition: all 0.2s ease-in-out;
+    height: 3px;
+    width: 75%;
+    background: silver;
+    margin: 0.5rem;   
 }
 
 .dropdown-arrow {
@@ -209,7 +234,7 @@ body {
     color: var(--text-color);
     cursor: pointer;
     font-size: 0.875rem;
-    font-family: monospace;
+    font-family: var(--le-font);
 }
 
 .control-select:hover {
@@ -229,7 +254,7 @@ body {
     border-radius: 0.25rem;
     color: var(--text-color);
     font-size: 0.875rem;
-    font-family: monospace;
+    font-family: var(--le-font);
     box-sizing: border-box;
 }
 
@@ -409,7 +434,7 @@ body {
     border-radius: 0.25rem;
     color: var(--text-color);
     font-size: 0.875rem;
-    font-family: monospace;
+    font-family: var(--le-font);
     box-sizing: border-box;
     margin-bottom: 0.5rem;
 }
@@ -429,7 +454,7 @@ body {
     color: var(--text-color);
     cursor: pointer;
     font-size: 0.875rem;
-    font-family: monospace;
+    font-family: var(--le-font);
     margin-bottom: 0.5rem;
 }
 

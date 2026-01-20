@@ -25,7 +25,7 @@ console.log(`
 [Log] numRows: 21 (script.js, line 88)
 [Log] numCols: 28 (script.js, line 88)
 [Log] rowWidth: 53 (script.js, line 88)
-[Log] colWidth: 54 (script.js, line 88)
+[Log] colHeight: 54 (script.js, line 88)
 [Log] randomOffset: 1 (script.js, line 88)
 [Log] interpolationSteps: 4 (script.js, line 88)
 [Log] animationSpeed: 100 (script.js, line 88)
@@ -36,7 +36,7 @@ console.log(`
 [Log] numRows: 16 (script.js, line 104)
 [Log] numCols: 29 (script.js, line 104)
 [Log] rowWidth: 28 (script.js, line 104)
-[Log] colWidth: 85 (script.js, line 104)
+[Log] colHeight: 85 (script.js, line 104)
 [Log] randomOffset: 72 (script.js, line 104)
 [Log] interpolationSteps: 19 (script.js, line 104)
 [Log] animationSpeed: 100 (script.js, line 104)
@@ -50,26 +50,27 @@ let allColumnsPoints = [];
 
 // Menu-related variables
 let sliderValues = {
-  numRows:            { min: 2, value: 2, max: 30 },
-  numCols:            { min: 3, value: 3, max: 30 }, // this parameter no longer will be tweaked
-  rowWidth:           { min: 2, value: 30, max: 100 },
-  colWidth:           { min: 2, value: 30, max: 100 },
-  randomOffset:       { min: 0, value: 25, max: 100 },
-  interpolationSteps: { min: 1, value: 10, max: 20 },
-  animationSpeed:     { min: 30, value: 150, max: 500 },
-  maxShapes:          { min: 1, value: 5, max: 30 },
-  strokeWeight:       { min: 0, value: 0, max: 100 },
-  obstaclePushStrength: { min: 0, value: 50, max: 200 },
-  bgColor:            { value: '#ffffff' },
-  strokeColor:        { value: '#000000' },
-  fillColor:          { value: '#ff0f0f' }
+    interpolationSteps: { min: 1, value: 10, max: 50 }, 
+    numRows:            { min: 2, value: 2, max: 30 },
+    numCols:            { min: 3, value: 3, max: 30 }, // this parameter no longer will be tweaked
+    rowWidth:           { min: 2, value: 500, max: 1000 },
+    colHeight:           { min: 2, value: 200, max: 1000 },
+    randomOffset:       { min: 0, value: 25, max: 100 },
+    animationSpeed:     { min: 30, value: 150, max: 500 },
+    maxShapes:          { min: 1, value: 5, max: 30 },
+    strokeWeight:       { min: 0, value: 0, max: 100 },
+    obstaclePushStrength: { min: 0, value: 50, max: 200 },
+    bgColor:            { value: '#ffffff' },
+    strokeColor:        { value: '#000000' },
+    fillColor:          { value: '#ff0f0f' }
 };
 let flags = {
   shadows: false,
   mode: false,
     randomMode: false,
     showPoints: false,
-    showObstacle: false
+    showObstacle: false,
+    includeBackground: true
 };
 let isAnimating = false;
 let sketchNum = 0;
@@ -111,13 +112,13 @@ function generateRandomValues() {
 function logCurrentParameters() {
 
     
-    for (let prop in sliderValues) {
-        if (sliderValues[prop].min !== undefined) {
-            console.log(`${prop}: ${sliderValues[prop].value}`);
-        } else {
-            console.log(`${prop}: ${sliderValues[prop].value}`);
-        }
-    }
+    // for (let prop in sliderValues) {
+    //     if (sliderValues[prop].min !== undefined) {
+    //         console.log(`${prop}: ${sliderValues[prop].value}`);
+    //     } else {
+    //         console.log(`${prop}: ${sliderValues[prop].value}`);
+    //     }
+    // }
 }
 
 // apply random values to sliders
@@ -125,12 +126,12 @@ function applyRandomValues() {
     let randomValues = generateRandomValues();
     sketchNum ++;
     
-    console.log('=== ' + sketchNum + ' ===');
-   console.log(new Date().toISOString()); 
+    // console.log('=== ' + sketchNum + ' ===');
+//    console.log(new Date().toISOString()); 
 
     for (let prop in randomValues) {
         sliderValues[prop].value = randomValues[prop];
-        console.log(`${prop}: ${randomValues[prop]}`);
+        // console.log(`${prop}: ${randomValues[prop]}`);
         
         // update dom elements
         let slider = document.getElementById(prop + 'Slider');
@@ -139,7 +140,7 @@ function applyRandomValues() {
         if (valueSpan) valueSpan.textContent = randomValues[prop];
     }
 
-    console.log('=========================');
+    // console.log('=========================');
     
     // update obstacle manager push strength if it exists
     // if (obstacleManager && randomValues.obstaclePushStrength !== undefined) {
@@ -147,19 +148,19 @@ function applyRandomValues() {
     // }
     
     // regenerate grid points with new values
-    currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
-    nextPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
+    currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
+    nextPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
 }
 
 
-function generateGridPoints(numRows, numCols, rowWidth, colWidth, randomOffset, seed) {
+function generateGridPoints(numRows, numCols, rowWidth, colHeight, randomOffset, seed) {
     randomSeed(seed);
     let columnsPoints = [];
     for (let row = 0; row < numRows; row++) {
         let columnPoints = [];
         for (let col = 0; col < numCols; col++) {
             let x = row * rowWidth + random(randomOffset);
-            let y = col * colWidth + random(randomOffset);
+            let y = col * colHeight + random(randomOffset);
             let point = createVector(x, y);
             
             // apply obstacle avoidance if obstacle manager exists
@@ -327,8 +328,8 @@ function setup() {
     strokeCap(SQUARE);
 	createCanvas(windowWidth, windowHeight);
     // generate initial points
-    currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
-    nextPoints    = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
+    currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
+    nextPoints    = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
     
     // Initialize slider DOM elements to match sliderValues
     initializeSliders();
@@ -362,7 +363,7 @@ function draw() {
             }
         }
         currentPoints = nextPoints.map(col => col.map(v => v.copy()));
-        nextPoints = generateGridPoints(sliderValues.numRows.value, sliderValues.numCols.value, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
+        nextPoints = generateGridPoints(sliderValues.numRows.value, sliderValues.numCols.value, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
     }
 }
 
@@ -371,6 +372,7 @@ function draw() {
 if(document.getElementById('randomModeCheckbox')) document.getElementById('randomModeCheckbox').checked = flags.randomMode;
 if(document.getElementById('showPointsCheckbox')) document.getElementById('showPointsCheckbox').checked = flags.showPoints;
 if(document.getElementById('showObstacleCheckbox')) document.getElementById('showObstacleCheckbox').checked = flags.showObstacle;
+if(document.getElementById('includeBackgroundCheckbox')) document.getElementById('includeBackgroundCheckbox').checked = flags.includeBackground;
 
 //////////////////////////////////
 
@@ -519,8 +521,8 @@ function updateSliderValue(property, value) {
     sliderValues[property].value = parseFloat(value);
     document.getElementById(property + 'Value').textContent = value;
     if (property === 'numRows') {
-        currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
-        nextPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
+        currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
+        nextPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
     }
     // if (property === 'obstaclePushStrength' && obstacleManager) {
     //     obstacleManager.pushStrength = parseFloat(value);
@@ -587,14 +589,21 @@ function toggleAnimation() {
 }
 
 function exportFrame() {
-    saveCanvas('animation_frame', 'png');
+    let g = createGraphics(width, height);
+    if (flags.includeBackground) {
+        g.background(sliderValues.bgColor.value);
+    }
+    drawScene(g);
+    g.save('iba.png');
 }
 
 function exportGraphics() {
-    let g = createGraphics(width, height);
-    g.clear(); // Set to transparent
+    let g = createGraphics(width, height, SVG);
+    if (flags.includeBackground) {
+        g.background(sliderValues.bgColor.value);
+    }
     drawScene(g);
-    g.save('graphics_no_bg.svg');
+    g.save('iba.svg');
 }
 
 // Preset functions
@@ -692,8 +701,8 @@ function loadPreset() {
         // }
         
         // regenerate points if grid dimensions changed
-        currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
-        nextPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colWidth.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
+        currentPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 1), currentShape);
+        nextPoints = generateGridPoints(sliderValues.numRows.value, 3, sliderValues.rowWidth.value, sliderValues.colHeight.value, sliderValues.randomOffset.value * (currentShape + 2), currentShape + 1);
         
         statusDiv.textContent = result.message;
         statusDiv.style.color = '#4ecdc4';

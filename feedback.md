@@ -20,7 +20,8 @@ Style:
 [x] And maybe somewhere at the bottom 'Somehow for IBA’, 
 [x] and if you want to put your name in the source code or somehting, go ahead! 
 
-
+Second feedback:
+[] initial size of the object a bit bigger
 
 
 
